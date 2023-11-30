@@ -1,0 +1,4 @@
+/build
+/src/androidTest/
+/src/unitTest/
+/src/test/java/com/example/webviewdemo/ExampleUnitTest.kt
