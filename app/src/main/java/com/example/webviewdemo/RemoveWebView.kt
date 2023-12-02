@@ -22,6 +22,7 @@ class RemoveWebView
     var surfaceWidth = 0
     var surfaceHeight = 0
     var iWebViewAidlInterface: IWebviewAidlInterface? = null
+    var surfaceId: Int = -1
 
     companion object {
         private const val TAG = "RemoveWebView"
@@ -31,7 +32,12 @@ class RemoveWebView
         override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
             Log.i(TAG, "onServiceConnected")
             iWebViewAidlInterface = IWebviewAidlInterface.Stub.asInterface(p1)
-            iWebViewAidlInterface?.bindSurface(surface, surfaceWidth, surfaceHeight)
+            surfaceId = iWebViewAidlInterface?.bindSurface(
+                surface,
+                surfaceWidth,
+                surfaceHeight,
+                "https://www.baidu.com"
+            ) ?: -1
         }
 
         override fun onServiceDisconnected(p0: ComponentName?) {
@@ -83,7 +89,7 @@ class RemoveWebView
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-        iWebViewAidlInterface?.dispatchTouchEvent(event)
+        iWebViewAidlInterface?.dispatchTouchEvent(surfaceId, event)
         return true
     }
 

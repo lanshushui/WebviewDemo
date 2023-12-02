@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.Surface
 import android.view.WindowManager
+import java.util.concurrent.atomic.AtomicInteger
 
 
 class RemoteService : Service() {
@@ -20,44 +21,51 @@ class RemoteService : Service() {
         private const val TAG = "RemoteService"
     }
 
-    private var surface: Surface? = null
-    private var width = 0
-    private var height = 0
+    private val WEBVIEW_ID = AtomicInteger(1)
+
     val displayManager by lazy {
         getSystemService(DISPLAY_SERVICE) as DisplayManager
     }
     val handler by lazy {
         Handler(Looper.getMainLooper())
     }
-    var presentation: WebViewPresentation? = null
+
+    //存储所有WebViewPresentation
+    private val webViewMap = HashMap<Int, WebViewPresentation>()
 
     private val binder = object : IWebviewAidlInterface.Stub() {
-        override fun bindSurface(view: Surface?, width: Int, height: Int) {
-            surface = view
-            this@RemoteService.width = width
-            this@RemoteService.height = height
-
+        override fun bindSurface(view: Surface?, width: Int, height: Int, url: String): Int {
+            val surfaceId = WEBVIEW_ID.getAndIncrement()
             val pid = Process.myPid()
-            Log.d(TAG, "RemoteService 当前进程的PID是：$pid")
-            Log.i(TAG, "bindSurface ${width}--${height}")
-            handler.post {
-                createVirtualAndShowPresentation()
+            Log.d(TAG, "bindSurface $view, 当前进程的PID是：$pid")
+            Log.i(TAG, "bindSurface ${width}--${height}, surfaceId is $surfaceId")
+            if (view == null) {
+                Log.d(TAG, "bindSurface error,is null")
+                return surfaceId
             }
+
+            handler.post {
+                createVirtualAndShowPresentation(view, surfaceId, width, height, url)
+            }
+            return surfaceId
         }
 
-        override fun dispatchTouchEvent(event: MotionEvent?) {
+        override fun dispatchTouchEvent(surfaceId: Int, event: MotionEvent?) {
             if (event != null) {
                 handler.post {
-                    presentation?.dispatchTouchEvent(event)
+                    webViewMap[surfaceId]?.dispatchTouchEvent(event)
                 }
             }
         }
     }
 
-    private fun createVirtualAndShowPresentation() {
-
-
-        val flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION
+    private fun createVirtualAndShowPresentation(
+        surface: Surface,
+        surfaceId: Int,
+        width: Int,
+        height: Int,
+        url: String
+    ) {
         val virtualDisplay =
             displayManager.createVirtualDisplay(
                 "webViewContainer",
@@ -65,10 +73,12 @@ class RemoteService : Service() {
                 height,
                 applicationContext.resources.displayMetrics.densityDpi,
                 surface,
-                flags
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION
             )
-        presentation = WebViewPresentation(this, virtualDisplay.display)
-        presentation?.show()
+        val presentation = WebViewPresentation(this, virtualDisplay.display)
+        webViewMap[surfaceId] = presentation
+        presentation.loadUrl(url)
+        presentation.show()
     }
 
 

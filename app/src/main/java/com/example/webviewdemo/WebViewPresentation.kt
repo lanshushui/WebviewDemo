@@ -17,12 +17,33 @@ class WebViewPresentation(context: Context, display: Display) : Presentation(con
         private const val TAG = "WebViewPresentation"
     }
 
+    val pendingAction = mutableListOf<Runnable>()
+
+    private val webView: WebView? by lazy {
+        findViewById(R.id.webview)
+    }
+    private var isCreated = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(TAG,"WebViewPresentation onCreate")
+        Log.i(TAG, "WebViewPresentation onCreate")
         setContentView(R.layout.persentation_webview)
-        val webView:WebView = findViewById(R.id.webview)
+        pendingAction.forEach {
+            it.run()
+        }
+        pendingAction.clear()
+        isCreated = true
+    }
 
-        webView.loadUrl("https://www.bilibili.com")
+    fun loadUrl(url: String) = runAfterCreate {
+        webView?.loadUrl(url)
+    }
+
+    private fun runAfterCreate(action: Runnable) {
+        if (isCreated) {
+            action.run()
+        } else {
+            pendingAction.add(action)
+        }
     }
 }
