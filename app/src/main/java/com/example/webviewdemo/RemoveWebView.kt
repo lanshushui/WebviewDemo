@@ -10,6 +10,7 @@ import android.os.IBinder
 import android.os.Process
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.Surface
 import android.view.TextureView
 
@@ -20,6 +21,7 @@ class RemoveWebView
     var surface: Surface? = null
     var surfaceWidth = 0
     var surfaceHeight = 0
+    var iWebViewAidlInterface: IWebviewAidlInterface? = null
 
     companion object {
         private const val TAG = "RemoveWebView"
@@ -28,8 +30,8 @@ class RemoveWebView
     val connect = object : ServiceConnection {
         override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
             Log.i(TAG, "onServiceConnected")
-            val iWebViewAidlInterface = IWebviewAidlInterface.Stub.asInterface(p1)
-            iWebViewAidlInterface.bindSurface(surface, surfaceWidth, surfaceHeight)
+            iWebViewAidlInterface = IWebviewAidlInterface.Stub.asInterface(p1)
+            iWebViewAidlInterface?.bindSurface(surface, surfaceWidth, surfaceHeight)
         }
 
         override fun onServiceDisconnected(p0: ComponentName?) {
@@ -49,7 +51,7 @@ class RemoveWebView
         width: Int,
         height: Int
     ) {
-        Log.i(TAG,"onSurfaceTextureAvailable $surfaceTexture")
+        Log.i(TAG, "onSurfaceTextureAvailable $surfaceTexture")
         if (surface == null) {
             surface = Surface(surfaceTexture)
             surfaceWidth = width
@@ -68,16 +70,21 @@ class RemoveWebView
         width: Int,
         height: Int
     ) {
-        Log.i(TAG,"onSurfaceTextureSizeChanged $surfaceTexture")
+        Log.i(TAG, "onSurfaceTextureSizeChanged $surfaceTexture")
     }
 
     override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
-        Log.i(TAG,"onSurfaceTextureDestroyed $surfaceTexture")
+        Log.i(TAG, "onSurfaceTextureDestroyed $surfaceTexture")
         return false
     }
 
     override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
-        Log.i(TAG,"onSurfaceTextureUpdated $surfaceTexture")
+        Log.i(TAG, "onSurfaceTextureUpdated $surfaceTexture")
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        iWebViewAidlInterface?.dispatchTouchEvent(event)
+        return true
     }
 
 }

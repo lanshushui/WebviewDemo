@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Process
 import android.util.Log
+import android.view.MotionEvent
 import android.view.Surface
 import android.view.WindowManager
 
@@ -28,6 +29,7 @@ class RemoteService : Service() {
     val handler by lazy {
         Handler(Looper.getMainLooper())
     }
+    var presentation: WebViewPresentation? = null
 
     private val binder = object : IWebviewAidlInterface.Stub() {
         override fun bindSurface(view: Surface?, width: Int, height: Int) {
@@ -45,6 +47,12 @@ class RemoteService : Service() {
                 createVirtualAndShowPresentation()
             }
         }
+
+        override fun dispatchTouchEvent(event: MotionEvent?) {
+            if (event != null) {
+                presentation?.dispatchTouchEvent(event)
+            }
+        }
     }
 
     private fun createVirtualAndShowPresentation() {
@@ -60,8 +68,8 @@ class RemoteService : Service() {
                 surface,
                 flags
             )
-        val presentation = WebViewPresentation(this, virtualDisplay.display)
-        presentation.show()
+        presentation = WebViewPresentation(this, virtualDisplay.display)
+        presentation?.show()
     }
 
 

@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/holo_blue_dark">
-    <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.example.webviewdemo.LocalWebView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/webview">
 
-    </WebView>
+    </com.example.webviewdemo.LocalWebView>
 </FrameLayout>
