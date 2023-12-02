@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.Surface
 import android.view.WindowManager
+import java.lang.Exception
 import java.util.concurrent.atomic.AtomicInteger
 
 
@@ -57,6 +58,12 @@ class RemoteService : Service() {
                 }
             }
         }
+
+        override fun testCrash() {
+            handler.post {
+               throw Exception("多进程崩溃")
+            }
+        }
     }
 
     private fun createVirtualAndShowPresentation(
@@ -79,6 +86,16 @@ class RemoteService : Service() {
         webViewMap[surfaceId] = presentation
         presentation.loadUrl(url)
         presentation.show()
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        Log.i(TAG,"$this onCreate")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG,"$this onDestroy")
     }
 
 

@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <com.example.webviewdemo.RemoveWebView
+        android:id="@+id/webview1"
         android:layout_width="match_parent"
         android:layout_height="300dp"/>
 
@@ -14,4 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="50dp"/>
+    <Button
+        android:id="@+id/crash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="多进程崩溃"/>
+
 </LinearLayout>

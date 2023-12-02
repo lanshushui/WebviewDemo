@@ -11,4 +11,6 @@ interface IWebviewAidlInterface {
      int bindSurface(in Surface view,int width,int height,String url);
 
      void dispatchTouchEvent(int surfaceId,in MotionEvent event);
+
+     void testCrash();
 }

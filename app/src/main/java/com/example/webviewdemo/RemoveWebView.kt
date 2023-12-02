@@ -40,10 +40,17 @@ class RemoveWebView
             ) ?: -1
         }
 
-        override fun onServiceDisconnected(p0: ComponentName?) {
-            Log.i(TAG, "onServiceDisconnected")
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Log.i(TAG, "${this@RemoveWebView}  ,$name onServiceDisconnected")
+            iWebViewAidlInterface = null
         }
 
+        override fun onBindingDied(name: ComponentName?) {
+            super.onBindingDied(name)
+            Log.i(TAG, "${this@RemoveWebView}  ,$name onBindingDied")
+            iWebViewAidlInterface = null
+            bindService()
+        }
     }
 
     init {
@@ -91,6 +98,10 @@ class RemoveWebView
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         iWebViewAidlInterface?.dispatchTouchEvent(surfaceId, event)
         return true
+    }
+
+    fun crash() {
+        iWebViewAidlInterface?.testCrash()
     }
 
 }
