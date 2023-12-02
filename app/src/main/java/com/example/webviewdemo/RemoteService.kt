@@ -19,9 +19,9 @@ class RemoteService : Service() {
 
     companion object {
         private const val TAG = "RemoteService"
+        private val WEBVIEW_ID = AtomicInteger(1)
     }
 
-    private val WEBVIEW_ID = AtomicInteger(1)
 
     val displayManager by lazy {
         getSystemService(DISPLAY_SERVICE) as DisplayManager
