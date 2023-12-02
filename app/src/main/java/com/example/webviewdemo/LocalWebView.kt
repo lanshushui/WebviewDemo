@@ -1,9 +1,15 @@
 package com.example.webviewdemo
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.text.TextUtils
 import android.util.AttributeSet
-import android.webkit.WebSettings
+import android.util.Log
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import android.webkit.WebViewClient
+
 
 class LocalWebView @JvmOverloads constructor(
     context: Context,
@@ -24,5 +30,25 @@ class LocalWebView @JvmOverloads constructor(
         webSettings.javaScriptCanOpenWindowsAutomatically = true //支持通过JS打开新窗口
         webSettings.loadsImagesAutomatically = true //支持自动加载图片
         webSettings.defaultTextEncodingName = "utf-8" //设置编码格式
+        webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                url: String
+            ): Boolean {
+                return if (url.startsWith("http://") || url.startsWith("https://")) {
+                    //加载的url是http/https协议地址
+                    view?.loadUrl(url)
+                    super.shouldOverrideUrlLoading(view, url)
+                } else { //加载的url是自定义协议地址
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        context.startActivity(intent)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    true
+                }
+            }
+        }
     }
 }

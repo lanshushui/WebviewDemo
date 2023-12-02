@@ -23,6 +23,6 @@ class WebViewPresentation(context: Context, display: Display) : Presentation(con
         setContentView(R.layout.persentation_webview)
         val webView:WebView = findViewById(R.id.webview)
 
-        webView.loadUrl("https://www.baidu.com")
+        webView.loadUrl("https://www.bilibili.com")
     }
 }

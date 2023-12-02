@@ -40,9 +40,6 @@ class RemoteService : Service() {
             val pid = Process.myPid()
             Log.d(TAG, "RemoteService 当前进程的PID是：$pid")
             Log.i(TAG, "bindSurface ${width}--${height}")
-
-
-
             handler.post {
                 createVirtualAndShowPresentation()
             }
@@ -50,7 +47,9 @@ class RemoteService : Service() {
 
         override fun dispatchTouchEvent(event: MotionEvent?) {
             if (event != null) {
-                presentation?.dispatchTouchEvent(event)
+                handler.post {
+                    presentation?.dispatchTouchEvent(event)
+                }
             }
         }
     }
