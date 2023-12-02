@@ -1,17 +1,14 @@
-package com.example.webviewdemo
+package com.example.webviewlib
 
 import android.app.Service
 import android.content.Intent
-import android.graphics.Rect
 import android.hardware.display.DisplayManager
-import android.os.Debug
 import android.os.Handler
 import android.os.Looper
 import android.os.Process
 import android.util.Log
 import android.view.MotionEvent
 import android.view.Surface
-import android.view.WindowManager
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicInteger
 

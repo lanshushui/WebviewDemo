@@ -3,8 +3,8 @@ package com.example.webviewdemo
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.TextureView
 import android.widget.Button
+import com.example.webviewlib.RemoveWebView
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")

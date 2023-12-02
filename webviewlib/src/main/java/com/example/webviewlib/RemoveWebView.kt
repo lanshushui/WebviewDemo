@@ -1,4 +1,4 @@
-package com.example.webviewdemo
+package com.example.webviewlib
 
 import android.content.ComponentName
 import android.content.Context

@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.webviewdemo.RemoveWebView
+    <com.example.webviewlib.RemoveWebView
         android:id="@+id/webview1"
         android:layout_width="match_parent"
         android:layout_height="300dp"/>
 
-    <com.example.webviewdemo.RemoveWebView
+    <com.example.webviewlib.RemoveWebView
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="50dp"/>

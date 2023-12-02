@@ -1,7 +1,5 @@
 // IWebviewAidlInterface.aidl
-package com.example.webviewdemo;
-import android.view.Surface;
-import android.view.MotionEvent;
+package com.example.webviewlib;
 
 // Declare any non-default types here with import statements
 

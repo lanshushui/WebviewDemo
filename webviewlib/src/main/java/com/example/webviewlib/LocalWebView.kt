@@ -1,12 +1,9 @@
-package com.example.webviewdemo
+package com.example.webviewlib
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 

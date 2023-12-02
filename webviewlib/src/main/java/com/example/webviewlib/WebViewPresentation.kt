@@ -1,4 +1,4 @@
-package com.example.webviewdemo
+package com.example.webviewlib
 
 import android.annotation.SuppressLint
 import android.app.Presentation
@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Display
-import android.webkit.WebSettings
 import android.webkit.WebView
 
 
