@@ -5,5 +5,7 @@ import android.view.Surface;
 // Declare any non-default types here with import statements
 
 interface IWebviewAidlInterface {
-     void bindSurface(inout Surface view,int width,int height)       ;
+      //Surface变量不能用inout，否则binder通讯完会 重写surface到主进程，
+      //导致出现 java.lang.IllegalStateException: Surface has already been released
+     void bindSurface(in Surface view,int width,int height);
 }

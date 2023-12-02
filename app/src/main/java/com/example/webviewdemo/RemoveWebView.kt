@@ -21,18 +21,19 @@ class RemoveWebView
     var surfaceWidth = 0
     var surfaceHeight = 0
 
-    companion object{
-        private const val TAG="RemoveWebView"
+    companion object {
+        private const val TAG = "RemoveWebView"
     }
+
     val connect = object : ServiceConnection {
         override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-            Log.i(TAG,"onServiceConnected")
+            Log.i(TAG, "onServiceConnected")
             val iWebViewAidlInterface = IWebviewAidlInterface.Stub.asInterface(p1)
             iWebViewAidlInterface.bindSurface(surface, surfaceWidth, surfaceHeight)
         }
 
         override fun onServiceDisconnected(p0: ComponentName?) {
-            Log.i(TAG,"onServiceDisconnected")
+            Log.i(TAG, "onServiceDisconnected")
         }
 
     }
@@ -48,6 +49,7 @@ class RemoveWebView
         width: Int,
         height: Int
     ) {
+        Log.i(TAG,"onSurfaceTextureAvailable $surfaceTexture")
         if (surface == null) {
             surface = Surface(surfaceTexture)
             surfaceWidth = width
@@ -66,14 +68,16 @@ class RemoveWebView
         width: Int,
         height: Int
     ) {
-
+        Log.i(TAG,"onSurfaceTextureSizeChanged $surfaceTexture")
     }
 
     override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
+        Log.i(TAG,"onSurfaceTextureDestroyed $surfaceTexture")
         return false
     }
 
     override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
+        Log.i(TAG,"onSurfaceTextureUpdated $surfaceTexture")
     }
 
 }
