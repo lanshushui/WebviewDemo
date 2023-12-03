@@ -8,9 +8,9 @@ interface IWebviewAidlInterface {
       //导致出现 java.lang.IllegalStateException: Surface has already been released
      int bindSurface(in Surface view,int width,int height,String url);
 
-     void bindClientBinder(int surfaceId ,IBinder binder);
+     oneway void bindClientBinder(int surfaceId ,IBinder binder);
 
-     void dispatchTouchEvent(int surfaceId,in MotionEvent event);
+     oneway void dispatchTouchEvent(int surfaceId,in MotionEvent event);
 
-     void testCrash();
+     oneway void testCrash();
 }
