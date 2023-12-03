@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"/>
 
-    <com.example.webviewlib.RemoveWebView
+    <com.example.webviewlib.LocalWebView
+        android:id="@+id/localWebView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="50dp"/>
