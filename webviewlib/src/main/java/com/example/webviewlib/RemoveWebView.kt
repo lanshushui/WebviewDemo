@@ -23,6 +23,12 @@ class RemoveWebView
     var surfaceHeight = 0
     var iWebViewAidlInterface: IWebviewAidlInterface? = null
     var surfaceId: Int = -1
+    val binder = object : IClientAidlInterface.Stub() {
+        override fun success() {
+            Log.i(TAG, "$this success")
+        }
+
+    }
 
     companion object {
         private const val TAG = "RemoveWebView"
@@ -38,6 +44,7 @@ class RemoveWebView
                 surfaceHeight,
                 "https://www.baidu.com"
             ) ?: -1
+            iWebViewAidlInterface?.bindClientBinder(surfaceId, binder)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {

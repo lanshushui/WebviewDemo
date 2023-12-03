@@ -16,6 +16,12 @@ class WebViewPresentation(context: Context, display: Display) : Presentation(con
         private const val TAG = "WebViewPresentation"
     }
 
+    var binder: IClientAidlInterface? = null
+        set(value) {
+            field = value
+            value?.success()
+        }
+
     val pendingAction = mutableListOf<Runnable>()
 
     private val webView: WebView? by lazy {

@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.os.Handler
+import android.os.IBinder
 import android.os.Looper
 import android.os.Process
 import android.util.Log
@@ -48,6 +49,12 @@ class RemoteService : Service() {
             return surfaceId
         }
 
+        override fun bindClientBinder(surfaceId: Int, binder: IBinder) {
+            handler.post {
+                this@RemoteService.bindClientBinder(surfaceId, binder)
+            }
+        }
+
         override fun dispatchTouchEvent(surfaceId: Int, event: MotionEvent?) {
             if (event != null) {
                 handler.post {
@@ -58,9 +65,14 @@ class RemoteService : Service() {
 
         override fun testCrash() {
             handler.post {
-               throw Exception("多进程崩溃")
+                throw Exception("多进程崩溃")
             }
         }
+    }
+
+    private fun bindClientBinder(surfaceId: Int, binder: IBinder) {
+        Log.i(TAG, "bindClientBinder $surfaceId ,$binder")
+        webViewMap[surfaceId]?.binder = IClientAidlInterface.Stub.asInterface(binder)
     }
 
     private fun createVirtualAndShowPresentation(
@@ -87,12 +99,12 @@ class RemoteService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.i(TAG,"$this onCreate")
+        Log.i(TAG, "$this onCreate")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i(TAG,"$this onDestroy")
+        Log.i(TAG, "$this onDestroy")
     }
 
 
