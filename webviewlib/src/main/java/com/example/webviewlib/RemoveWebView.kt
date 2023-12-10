@@ -42,7 +42,7 @@ class RemoveWebView
                 surface,
                 surfaceWidth,
                 surfaceHeight,
-                "https://www.baidu.com"
+                "https://www.bilibili.com"
             ) ?: -1
             iWebViewAidlInterface?.bindClientBinder(surfaceId, binder)
         }
