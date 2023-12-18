@@ -91,6 +91,9 @@ class RemoveWebView
         height: Int
     ) {
         Log.i(TAG, "onSurfaceTextureSizeChanged $surfaceTexture")
+        surfaceWidth = width
+        surfaceHeight = height
+        iWebViewAidlInterface?.changSurfaceWH(surfaceId, surface, width, height)
     }
 
     override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {

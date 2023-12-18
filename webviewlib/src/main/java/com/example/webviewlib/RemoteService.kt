@@ -49,6 +49,12 @@ class RemoteService : Service() {
             return surfaceId
         }
 
+        override fun changSurfaceWH(surfaceId: Int, surface: Surface, width: Int, height: Int) {
+            handler.post {
+                reCreateVirtualAndShowPresentation(surfaceId, surface, width, height)
+            }
+        }
+
         override fun bindClientBinder(surfaceId: Int, binder: IBinder) {
             handler.post {
                 this@RemoteService.bindClientBinder(surfaceId, binder)
@@ -94,6 +100,38 @@ class RemoteService : Service() {
         val presentation = WebViewPresentation(this, virtualDisplay.display)
         webViewMap[surfaceId] = presentation
         presentation.loadUrl(url)
+        presentation.show()
+    }
+
+    /**
+     * 重新创建虚拟屏幕
+     */
+    private fun reCreateVirtualAndShowPresentation(
+        surfaceId: Int,
+        surface: Surface,
+        width: Int,
+        height: Int
+    ) {
+        val oldPresentation = webViewMap[surfaceId]
+        if (oldPresentation == null) {
+            Log.d(TAG, "oldPresentation is null , $surfaceId")
+            return
+        }
+        //取消旧的presentation
+        val controller = oldPresentation.controller
+        oldPresentation.dismiss()
+        //创建新的presentation
+        val virtualDisplay =
+            displayManager.createVirtualDisplay(
+                "webViewContainer",
+                width,
+                height,
+                applicationContext.resources.displayMetrics.densityDpi,
+                surface,
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION
+            )
+        val presentation = WebViewPresentation(this, virtualDisplay.display, controller)
+        webViewMap[surfaceId] = presentation
         presentation.show()
     }
 

@@ -13,13 +13,16 @@ import android.view.ViewGroup
  * 所以该类不应该存有任何数据，只单纯作为一个中间类
  */
 @SuppressLint("MissingInflatedId")
-class WebViewPresentation(context: Context, display: Display) : Presentation(context, display) {
+class WebViewPresentation(
+    context: Context,
+    display: Display,
+    val controller: PresentationController = PresentationController(context)
+) : Presentation(context, display) {
 
     companion object {
         private const val TAG = "WebViewPresentation"
     }
 
-    private var controller = PresentationController(context)
 
     private var isCreated = false
 
@@ -39,6 +42,7 @@ class WebViewPresentation(context: Context, display: Display) : Presentation(con
         pendingAction.clear()
         isCreated = true
     }
+
     private fun runAfterCreate(action: Runnable) {
         if (isCreated) {
             action.run()
