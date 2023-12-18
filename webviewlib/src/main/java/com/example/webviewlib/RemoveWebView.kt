@@ -99,7 +99,7 @@ class RemoveWebView
     }
 
     override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
-        Log.i(TAG, "onSurfaceTextureUpdated $surfaceTexture")
+        //Log.i(TAG, "onSurfaceTextureUpdated $surfaceTexture")
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
