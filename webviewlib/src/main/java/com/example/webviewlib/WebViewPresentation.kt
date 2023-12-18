@@ -6,9 +6,12 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Display
-import android.webkit.WebView
+import android.view.ViewGroup
 
-
+/**
+ * 因为surface宽高变化时需要重新创建 虚拟屏幕和Presentation，但webview的内容不应该变化
+ * 所以该类不应该存有任何数据，只单纯作为一个中间类
+ */
 @SuppressLint("MissingInflatedId")
 class WebViewPresentation(context: Context, display: Display) : Presentation(context, display) {
 
@@ -16,39 +19,39 @@ class WebViewPresentation(context: Context, display: Display) : Presentation(con
         private const val TAG = "WebViewPresentation"
     }
 
-    var binder: IClientAidlInterface? = null
-        set(value) {
-            field = value
-            value?.success()
-        }
+    private var controller = PresentationController(context)
+
+    private var isCreated = false
 
     val pendingAction = mutableListOf<Runnable>()
-
-    private val webView: WebView? by lazy {
-        findViewById(R.id.webview)
-    }
-    private var isCreated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "WebViewPresentation onCreate")
-        setContentView(R.layout.persentation_webview)
+        setContentView(R.layout.persentation_container)
+        val container = findViewById<ViewGroup>(R.id.container)
+        container.post {
+            controller.addWebview(container)
+        }
         pendingAction.forEach {
             it.run()
         }
         pendingAction.clear()
         isCreated = true
     }
-
-    fun loadUrl(url: String) = runAfterCreate {
-        webView?.loadUrl(url)
-    }
-
     private fun runAfterCreate(action: Runnable) {
         if (isCreated) {
             action.run()
         } else {
             pendingAction.add(action)
         }
+    }
+
+    fun loadUrl(url: String) = runAfterCreate {
+        controller.loadUrl(url)
+    }
+
+    fun bindClientBinder(binder: IClientAidlInterface?) {
+        controller.binder = binder
     }
 }

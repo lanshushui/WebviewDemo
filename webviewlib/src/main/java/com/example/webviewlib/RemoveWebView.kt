@@ -99,6 +99,7 @@ class RemoveWebView
     }
 
     override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
+        val time = System.currentTimeMillis()
         //Log.i(TAG, "onSurfaceTextureUpdated $surfaceTexture")
     }
 

@@ -72,7 +72,7 @@ class RemoteService : Service() {
 
     private fun bindClientBinder(surfaceId: Int, binder: IBinder) {
         Log.i(TAG, "bindClientBinder $surfaceId ,$binder")
-        webViewMap[surfaceId]?.binder = IClientAidlInterface.Stub.asInterface(binder)
+        webViewMap[surfaceId]?.bindClientBinder(IClientAidlInterface.Stub.asInterface(binder))
     }
 
     private fun createVirtualAndShowPresentation(
