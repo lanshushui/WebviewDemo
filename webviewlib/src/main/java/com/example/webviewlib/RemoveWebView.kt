@@ -64,6 +64,8 @@ class RemoveWebView
         val pid = Process.myPid()
         Log.d(TAG, "RemoveWebView 当前进程的PID是：$pid")
         surfaceTextureListener = this
+        //TextureView 的背景设置为透明，避免黑屏，显示出下层的内容
+        isOpaque = false
     }
 
     override fun onSurfaceTextureAvailable(
